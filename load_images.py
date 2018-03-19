@@ -32,7 +32,7 @@ images = [
             { 'filename':'timelapse.czi - timelapse.czi #20.tif', 'rounded':254, 'egress':259, 'notes':'' }
         ]
 
-def allimages():
+def all_images():
     for image in images:
         img = skimage.io.imread(''.join([prefix,image['filename']]))
         yield img, image['rounded'], image['egress']

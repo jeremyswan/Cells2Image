@@ -3,10 +3,10 @@ import numpy as np
 
 import load_images
 
-allimg = load_images.allimages()
+imggen = load_images.all_images()
 
 
-for image in allimg:
+for image in imggen:
     img = image[0]
     print image[1]
 
