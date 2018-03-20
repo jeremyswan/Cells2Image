@@ -1,6 +1,6 @@
 import skimage.io
 import gc
-
+import random
 
 prefix = '../Curated Images/'
 
@@ -37,6 +37,17 @@ def all_images():
         img = skimage.io.imread(''.join([prefix,image['filename']]))
         yield img, image['rounded'], image['egress']
         gc.collect()
+
+def all_timepoints(img):
+    for frame in range(img.shape[0]):
+        timepoint = img[frame,:,:]
+        yield timepoint
+
+def fetch_random_image():
+    imgnum = random.randint(len(images))
+    img = skimage.io.imread(''.join([prefix,images[imgnum]['filename']]))
+    framenum = random.randint(img.shape[0])
+    return img[framenum,:,:]
 
 # for image in images:
 #     img = skimage.io.imread(''.join([prefix,image['filename']]))
