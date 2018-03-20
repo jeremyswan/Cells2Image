@@ -1,41 +1,43 @@
 import skimage.io
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import ndimage
+from skimage import filters
 
 import load_images
 
-prefix = '../Curated Images/'
+ix=0
+movie = skimage.io.imread(''.join([load_images.prefix,load_images.images[ix]['filename']]))
+#print images[ix]['rounded']
 
-images = load_images.images
+A=movie[68,1,:,:]
 
-# for image in images:
-#     img = skimage.io.imread(''.join([prefix,image['filename']]))
-#     print image['rounded']
-#     plt.plot([np.sum(img[i,0,:,:]) for i in range(img.shape[0])])
-#
-# plt.show()
+B=np.abs(A-np.percentile(A.flatten(),75))
+B=ndimage.gaussian_filter(B,15)
+thr = filters.threshold_otsu(B)
+B=B>thr
 
-img = skimage.io.imread(''.join([prefix,images[0]['filename']]))
-#plt.hist(img[0,0,:,:].flatten())
-a=img[1,1,:,:]
-b=np.abs(a-np.mean(a.flatten()))
-#plt.imshow(a<np.percentile(b.flatten(),1),cmap='gray')
-plt.figure()
-plt.imshow(b,cmap='gray')
-plt.draw()
+L=skimage.measure.label(B)
+RP=skimage.measure.regionprops(L,intensity_image=A,)
 
-import numpy as np
-from skimage.segmentation import active_contour
-centr=np.array([250,250])
-rad=100
-si=np.array([centr[0]+rad*np.sin(np.linspace(0,2*np.pi,50)), centr[1]+rad*np.cos(np.linspace(0,2*np.pi,50))])
-si=np.transpose(si)
-s=active_contour(a,si,alpha=0.01,beta=0.01,w_line=1)
-#print(s)
-plt.figure()
-plt.imshow(a,cmap='gray')
-plt.plot(si[:,0],si[:,1])
-plt.plot(s[:,0],s[:,1])
-plt.draw()
+print 4*np.pi*RP[0].area/(RP[0].perimeter**2)
+
+# B=A-ndimage.gaussian_filter(A,sigma=15)
+
+# B=ndimage.grey_dilation(A,15)-ndimage.gaussian_filter(A,15)
+
+# B=filters.scharr(A)
+
+# thr = filters.threshold_otsu(ndimage.gaussian_filter(A,55))
+# B=A-thr
+
+# B=ndimage.morphological_gradient(A,15)
+
+plt.subplot(1,2,1)
+plt.imshow(A,cmap='gray')
+plt.subplot(1,2,2)
+plt.imshow(A*B,cmap='gray')
+# plt.imshow(B,cmap='gray')
+#plt.imshow(L,cmap='gray')
 
 plt.show()
