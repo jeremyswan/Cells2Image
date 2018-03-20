@@ -40,14 +40,14 @@ def all_images():
 
 def all_timepoints(img):
     for frame in range(img.shape[0]):
-        timepoint = img[frame,:,:]
+        timepoint = img[frame,:,:,:].squeeze()
         yield timepoint
 
 def fetch_random_image():
-    imgnum = random.randint(len(images))
+    imgnum = random.randint(0,len(images))
     img = skimage.io.imread(''.join([prefix,images[imgnum]['filename']]))
-    framenum = random.randint(img.shape[0])
-    return img[framenum,:,:]
+    framenum = random.randint(0,img.shape[0])
+    return img[framenum,:,:,:].squeeze()
 
 # for image in images:
 #     img = skimage.io.imread(''.join([prefix,image['filename']]))
