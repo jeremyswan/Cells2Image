@@ -12,7 +12,7 @@ import track_food_vacuole
 
 if __name__ == "__main__":
 
-movgen = image_data.all_movies()
+    movgen = image_data.all_movies()
 
     for movie in movgen:
         framegen = image_data.all_frames(movie)
