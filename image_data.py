@@ -52,11 +52,3 @@ def fetch_random_frame():
     img = skimage.io.imread(''.join([prefix,images[imgnum]['filename']]))
     framenum = random.randint(0,img.shape[0])
     return img[framenum,:,:,:].squeeze()
-
-# for image in images:
-#     img = skimage.io.imread(''.join([prefix,image['filename']]))
-#
-#     print image['rounded']
-#
-#     plt.plot([np.sum(img[i,0,:,:]) for i in range(img.shape[0])])
-#     plt.show()
