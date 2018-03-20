@@ -6,26 +6,19 @@ from skimage import filters
 
 import load_images
 
-def get_cell_mask(img,centroid,ptile=50,blur_sigma=11):
-    M=np.abs(A-np.percentile(A.flatten(),ptile))
-    M=ndimage.gaussian_filter(M,blur_sigma)
-    thr = filters.threshold_otsu(M)
-    M=M>thr
-    L=skimage.measure.label(M)
-    RP=skimage.measure.regionprops(L,intensity_image=A)
-    return M,RP
-
+import image_processing as ip
 
 ix=11
 movie = skimage.io.imread(''.join([load_images.prefix,load_images.images[ix]['filename']]))
 # print images[ix]['rounded']
+stop=load_images.images[ix]['egress']
 
 # circ=np.array(movie.shape[0])
 circ=[]
 for frame in range(movie.shape[0]):
     A=movie[frame,1,:,:]
 
-    B,RP=get_cell_mask(A,(250,250),ptile=25,blur_sigma=15)
+    B,RP=ip.get_cell_mask(A,(250,250),ptile=25,blur_sigma=15)
     
     if len(RP)!=0:
         circ.append(4*np.pi*RP[0].area/(RP[0].perimeter**2))
