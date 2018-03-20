@@ -1,7 +1,6 @@
 import skimage.io
-import numpy as np
+import gc
 
-import matplotlib.pyplot as plt
 
 prefix = '../Curated Images/'
 
@@ -33,10 +32,16 @@ images = [
             { 'filename':'timelapse.czi - timelapse.czi #20.tif', 'rounded':254, 'egress':259, 'notes':'' }
         ]
 
-for image in images:
-    img = skimage.io.imread(''.join([prefix,image['filename']]))
+def all_images():
+    for image in images:
+        img = skimage.io.imread(''.join([prefix,image['filename']]))
+        yield img, image['rounded'], image['egress']
+        gc.collect()
 
-    print image['rounded']
-
-    plt.plot([np.sum(img[i,0,:,:]) for i in range(img.shape[0])])
-    plt.show()
+# for image in images:
+#     img = skimage.io.imread(''.join([prefix,image['filename']]))
+#
+#     print image['rounded']
+#
+#     plt.plot([np.sum(img[i,0,:,:]) for i in range(img.shape[0])])
+#     plt.show()
