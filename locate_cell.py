@@ -5,7 +5,7 @@ import time
 import skimage.draw
 
 import image_data
-import track_food_vacuole
+import image_processing as ip
 
 
 
@@ -21,7 +21,7 @@ if __name__ == "__main__":
             imgplot.set_cmap('gray')
 
             com_out = np.zeros([frame.shape[1],frame.shape[2]])
-            com, labels, numlabels = track_food_vacuole.find_centroid(frame[1,:,:])
+            com, labels, numlabels = ip.find_food_vacuole_centroid(frame[1,:,:])
             #com_out[labels==1] = 1
             rr,cc = skimage.draw.circle(com[0],com[1],10)
             com_out[rr,cc] = 1
