@@ -32,27 +32,23 @@ images = [
             { 'filename':'timelapse.czi - timelapse.czi #20.tif', 'rounded':254, 'egress':259, 'notes':'' }
         ]
 
-def all_images():
+def all_movies():
     for image in images:
         img = skimage.io.imread(''.join([prefix,image['filename']]))
-        yield img, image['rounded'], image['egress']
+        yield img
         gc.collect()
 
-def all_timepoints(img):
-    for frame in range(img.shape[0]):
-        timepoint = img[frame,:,:,:].squeeze()
+def load_movie(filename):
+    movie = skimage.io.imread(''.join([prefix,images['filename']]))
+    return movie
+
+def all_frames(movie):
+    for ef,frame in enumerate(range(movie.shape[0])):
+        timepoint = movie[frame,:,:,:].squeeze()
         yield timepoint
 
-def fetch_random_image():
+def fetch_random_frame():
     imgnum = random.randint(0,len(images))
     img = skimage.io.imread(''.join([prefix,images[imgnum]['filename']]))
     framenum = random.randint(0,img.shape[0])
     return img[framenum,:,:,:].squeeze()
-
-# for image in images:
-#     img = skimage.io.imread(''.join([prefix,image['filename']]))
-#
-#     print image['rounded']
-#
-#     plt.plot([np.sum(img[i,0,:,:]) for i in range(img.shape[0])])
-#     plt.show()
