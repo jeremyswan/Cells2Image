@@ -1,4 +1,4 @@
 *.tif
 desktop.ini
 .vscode
-.pyc
+*.pyc
